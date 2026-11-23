@@ -1,0 +1,116 @@
+@page "/fetchproducts"
+@using System.Text.Json
+@implements IDisposable
+@inject ProductService ProductService
+
+<PageTitle>InventoryHub - Product List</PageTitle>
+
+<div class="header-row">
+    <h1>Product List</h1>
+    <button class="btn-primary" @onclick="RefreshProductsAsync" disabled="@_isLoading">
+        @(_isLoading ? "Refreshing..." : "Refresh")
+    </button>
+</div>
+
+@if (_isLoading)
+{
+    <p class="status-text">Loading inventory data...</p>
+}
+else if (!string.IsNullOrEmpty(_errorMessage))
+{
+    <div class="error-box" role="alert">
+        <strong>Error:</strong> @_errorMessage
+    </div>
+}
+else if (_products is null || _products.Length == 0)
+{
+    <p class="status-text">No products available in inventory.</p>
+}
+else
+{
+    <p class="cache-note">
+        Loaded @_products.Length products (@(_fromCache ? "served from client cache" : "fetched from API")).
+    </p>
+
+    <table class="inventory-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in _products)
+            {
+                <tr>
+                    <td>@product.Id</td>
+                    <td>@product.Name</td>
+                    <td>
+                        <span class="category-pill">@(product.Category?.Name ?? "Uncategorized")</span>
+                    </td>
+                    <td>@product.Price.ToString("C2")</td>
+                    <td>@product.Stock</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Product[]? _products;
+    private bool _isLoading = true;
+    private bool _fromCache;
+    private string? _errorMessage;
+    private CancellationTokenSource _cts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProductsAsync(forceRefresh: false);
+    }
+
+    private async Task RefreshProductsAsync()
+    {
+        await LoadProductsAsync(forceRefresh: true);
+    }
+
+    private async Task LoadProductsAsync(bool forceRefresh)
+    {
+        _isLoading = true;
+        _errorMessage = null;
+        _fromCache = !forceRefresh && ProductService.IsCacheValid;
+
+        try
+        {
+            _products = await ProductService.GetProductsAsync(forceRefresh, _cts.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            _errorMessage = "The request timed out or was cancelled.";
+        }
+        catch (HttpRequestException ex)
+        {
+            _errorMessage = $"Unable to reach the inventory API: {ex.Message}";
+        }
+        catch (JsonException)
+        {
+            _errorMessage = "Received invalid JSON data from the server.";
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Unexpected error: {ex.Message}";
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+
+    public void Dispose()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
+    }
+}

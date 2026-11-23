@@ -1,0 +1,144 @@
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8fafc;
+    color: #0f172a;
+}
+
+.page {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 240px;
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.25rem;
+    text-decoration: none;
+    padding: 0 1.25rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.nav-link {
+    display: block;
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 0.65rem 1.25rem;
+    border-radius: 6px;
+    margin: 0.2rem 0.75rem;
+}
+
+.nav-link.active,
+.nav-link:hover {
+    background: #334155;
+    color: #ffffff;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-row {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.brand-badge {
+    font-weight: 600;
+    color: #2563eb;
+}
+
+.content {
+    padding: 1.5rem 2rem;
+}
+
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.btn-primary {
+    display: inline-block;
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 0.55rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.info-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    max-width: 640px;
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.inventory-table th,
+.inventory-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.inventory-table th {
+    background: #f1f5f9;
+    font-weight: 600;
+}
+
+.category-pill {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.error-box {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+    padding: 0.85rem 1rem;
+    border-radius: 6px;
+}
+
+.cache-note,
+.status-text {
+    color: #475569;
+    margin-bottom: 0.75rem;
+}
